@@ -45,6 +45,12 @@ ball = GameSprite("ball.png", 300, 280, 5, 100, 100)
 speed_x = ball.speed
 speed_y = ball.speed
 
+font.init()
+font = font.SysFont('Arial', 35)
+
+lose_r = font.render("Игрок правый проиграл.", True, (0, 255, 0))
+lose_l = font.render("Игрок левый проиграл.", True, (0, 255, 0))
+
 game = True
 finish = False
 while game:
@@ -62,8 +68,12 @@ while game:
 
         if ball.rect.y > w_h - 50 or ball.rect.y < 0:
             speed_y *= -1
-        if ball.rect.x > w_w - 50 or ball.rect.x < 0:
-            speed_x *= -1
+        if ball.rect.x < 0:
+            window.blit(lose_l, (200, 200))
+            finish = True
+        if ball.rect.x > 600:
+            window.blit(lose_r, (200, 200))
+            finish = True
         if sprite.collide_rect(player_l, ball) or sprite.collide_rect(player_r, ball):
             speed_x *= -1
         ball.reset()
@@ -72,3 +82,4 @@ while game:
       
     display.update()
     clock.tick(fps)
+
