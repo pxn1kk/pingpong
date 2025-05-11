@@ -29,8 +29,8 @@ class Player(GameSprite):
             self.rect.y += self.speed
    
 
-w_w = 1000
-w_h = 1000
+w_w = 700
+w_h = 700
 window = display.set_mode((w_w, w_h))
 display.set_caption("Ping Pong")
 bg = (0,0,0)
@@ -38,9 +38,12 @@ window.fill(bg)
 clock = time.Clock()
 fps = 60
 
-player_r = Player("rightracket.png", 770, 0, 5, 200, 200)
-player_l = Player("leftracket.png", 70, 0, 5, 200, 200)
+player_r = Player("rightracket.png", 600, 0, 10, 100, 100)
+player_l = Player("leftracket.png", 1, 0, 10, 100, 100)
+ball = GameSprite("ball.png", 300, 280, 5, 100, 100)
 
+speed_x = ball.speed
+speed_y = ball.speed
 
 game = True
 finish = False
@@ -50,10 +53,22 @@ while game:
             game = False
     if finish != True:
         window.fill(bg)
-        player_l.reset()
-        player_r.reset()
+
+        ball.rect.x -= speed_x
+        ball.rect.y += speed_y
+        
         player_r.redate_r()
         player_l.redate_l()
-        
+
+        if ball.rect.y > w_h - 50 or ball.rect.y < 0:
+            speed_y *= -1
+        if ball.rect.x > w_w - 50 or ball.rect.x < 0:
+            speed_x *= -1
+        if sprite.collide_rect(player_l, ball) or sprite.collide_rect(player_r, ball):
+            speed_x *= -1
+        ball.reset()
+        player_l.reset()
+        player_r.reset()
+      
     display.update()
     clock.tick(fps)
